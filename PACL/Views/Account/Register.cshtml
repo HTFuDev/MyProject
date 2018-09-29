@@ -5,18 +5,14 @@
 <div class="row">
     <div class="col-sm-12">
         <h1>Registration</h1>
-        <form novalidate="novalidate" action="/account/register" method="post" class="needs-validation">
+        <form class="needs-validation" id="form-Registration" novalidate="novalidate">
             @Html.AntiForgeryToken()
             <div class="form-row">
                 <div class="form-group col-sm-8">
                     <label for="txtName">PACL Registration number</label>
                     <input type="text" class="form-control" id="txtName" placeholder="PACL Registration number"
                            name="UserId" required="required" />
-                    <div class="valid-feedback">
-                        Looks good
-                    </div>
-                    <div class="invalid-feedback">
-                        Enter PACL Registration number
+                    <div class="invalid-feedback" id="UserIdError">
                     </div>
                 </div>
             </div>
@@ -28,8 +24,7 @@
                     <div class="valid-feedback">
                         Looks good
                     </div>
-                    <div class="invalid-feedback">
-                        Invalid mobile number
+                    <div class="invalid-feedback" id="MobileError">
                     </div>
                 </div>
             </div>
@@ -38,8 +33,7 @@
                     <label for="txtOTP">OTP</label>
                     <input type="text" class="form-control" id="txtOTP" placeholder="OTP"
                            name="OTP" required="required" />
-                    <div class="invalid-feedback">
-                        Invalid OTP
+                    <div class="invalid-feedback" id="OTPError">
                     </div>
                 </div>
             </div>
@@ -48,8 +42,7 @@
                     <label for="txtCaptcha">Captcha</label>
                     <input type="text" class="form-control" id="txtCaptcha" placeholder="Captcha"
                            name="Captcha" required="required" />
-                    <div class="invalid-feedback">
-                        Enter Captcha
+                    <div class="invalid-feedback" id="CaptchaError">
                     </div>
                 </div>
             </div>
@@ -57,10 +50,8 @@
                 <div class="form-group col-sm-8">
                     <label for="txtPassword">Password</label>
                     <input type="password" class="form-control" id="txtPassword" placeholder="Password"
-                           name="Password" required="required" minlength="6"
-                           oninput="form.ConfirmPassword.pattern = escapeRegExp(this.value)" />
-                    <div class="invalid-feedback">
-                        Password must contain atleast 6 characters
+                           name="Password" required="required"/>
+                    <div class="invalid-feedback" id="PasswordError">
                     </div>
                 </div>
             </div>
@@ -69,8 +60,7 @@
                     <label for="txtPassword">Confirm Password</label>
                     <input type="password" class="form-control" id="txtConfirmPassword" placeholder="Confirm Password"
                            name="ConfirmPassword" required="required" />
-                    <div class="invalid-feedback">
-                        Password and Confirm Password do not match.
+                    <div class="invalid-feedback" id="CPasswordError">
                     </div>
                 </div>
             </div>
@@ -79,6 +69,58 @@
     </div>
 </div>
 <script>
+    $(function () {
+
+        $('#UserIdError').hide();
+        $('#MobileError').hide();
+        $('#OTPError').hide();
+        $('#CaptchaError').hide();
+        $('#PasswordError').hide();
+        $('#CPasswordError').hide();
+
+
+
+        var error_userid = false;
+        var error_mobile = false;
+        var error_otp = false;
+        var error_captcha = false;
+        var error_password = false;
+        var error_cpassword = false;
+
+        $('#txtName').focusout(function () {
+            check_fname();
+        });
+
+        function check_fname() {
+            var fname = $('#txtName').val()
+            if (fname.length > 0) {
+                $('#txtName').css('border-color', '#28a745');
+            } else {
+                $('#UserIdError').html('Please enter your PACL Registration number');
+                $('#UserIdError').show();
+                $('#txtName').css('border-color', '#dc3545');
+                error_userid = true;
+                
+            }
+        }
+
+        $('#form-Registration').submit(function () {
+            debugger;
+            error_userid = false;
+            check_fname();
+
+            if (error_userid === false) {
+                alert('Registration Successful');
+                return true;
+            } else {
+                alert('Please fill the form');
+                return false;
+            }
+        });
+    });
+
+
+
     $(document).on("submit", ".needs-validation", validate);
     $(".needs-validation input").blur(validate);
 
